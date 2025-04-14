@@ -68,19 +68,19 @@ if uploaded_file:
         team_df["Velocity"].plot(ax=axs[0], marker='o', color='blue', title=f"{selected_team} - Velocity Trend")
         axs[0].set_ylabel("Story Points")
 
-        # 3. Bugs created/closed
+        # 2. Bugs created/closed
         team_df[["Bugs Created", "Bugs Closed"]].plot(kind='bar', ax=axs[2], title=f"{selected_team} - Bugs Trend", stacked=False)
         axs[2].set_ylabel("Count")
         axs[2].set_xlabel("Sprint")
         axs[2].tick_params(axis='x', rotation=45)
 
-        # 4. SP to Hour Ratio
+        # 3. SP to Hour Ratio
         team_df["SP/Hour"].plot(ax=axs[3], marker='D', color='purple', title=f"{selected_team} - SP to Hour Ratio")
         axs[3].set_ylabel("SP/Hour")
         axs[3].set_xlabel("Sprint")
         axs[3].tick_params(axis='x', rotation=45)
 
-                # 2. Releases per sprint (replaces Utilization)
+        # 4. Releases per sprint (replaces Utilization)
         team_df["Releases"].plot(kind='bar', ax=axs[1], color='orange', title=f"{selected_team} - Number of Releases per Sprint")
         axs[1].set_ylabel("Number of Releases")
         axs[1].set_xlabel("Sprint")
