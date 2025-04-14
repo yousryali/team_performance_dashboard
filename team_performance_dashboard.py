@@ -68,12 +68,6 @@ if uploaded_file:
         team_df["Velocity"].plot(ax=axs[0], marker='o', color='blue', title=f"{selected_team} - Velocity Trend")
         axs[0].set_ylabel("Story Points")
 
-        # 2. Releases per sprint (replaces Utilization)
-        team_df["Releases"].plot(kind='bar', ax=axs[1], color='orange', title=f"{selected_team} - Number of Releases per Sprint")
-        axs[1].set_ylabel("Number of Releases")
-        axs[1].set_xlabel("Sprint")
-        axs[1].tick_params(axis='x', rotation=45)
-
         # 3. Bugs created/closed
         team_df[["Bugs Created", "Bugs Closed"]].plot(kind='bar', ax=axs[2], title=f"{selected_team} - Bugs Trend", stacked=False)
         axs[2].set_ylabel("Count")
@@ -86,6 +80,12 @@ if uploaded_file:
         axs[3].set_xlabel("Sprint")
         axs[3].tick_params(axis='x', rotation=45)
 
+                # 2. Releases per sprint (replaces Utilization)
+        team_df["Releases"].plot(kind='bar', ax=axs[1], color='orange', title=f"{selected_team} - Number of Releases per Sprint")
+        axs[1].set_ylabel("Number of Releases")
+        axs[1].set_xlabel("Sprint")
+        axs[1].tick_params(axis='x', rotation=45)
+        
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         st.pyplot(fig)
 
