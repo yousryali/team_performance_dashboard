@@ -5,21 +5,21 @@ import seaborn as sns
 from matplotlib.backends.backend_pdf import PdfPages
 import io
 
-# App title
+# App configuration
 st.set_page_config(layout="wide")
 st.title("📊 Team Performance Dashboard")
 st.write("Upload the performance Excel sheet to generate visual analysis per team.")
 
-# Upload Excel File
+# Upload Excel file
 uploaded_file = st.file_uploader("Upload Excel File", type=["xlsx"])
 
 if uploaded_file:
-    # Read file and structure data
+    # Load and reshape data
     df = pd.read_excel(uploaded_file, engine="openpyxl")
     df = df.set_index("Row Labels").T
     df.index.name = "Sprint"
 
-    # Metrics mapping
+    # Metrics for each team
     teams = {
         "Agency": [
             "Agency Velocity", "Agency Billable TS", "Agency Non-Billable TS",
@@ -41,46 +41,60 @@ if uploaded_file:
     pdf_buffer = io.BytesIO()
     pdf = PdfPages(pdf_buffer)
 
+    # Team selection
     selected_team = st.selectbox("Select Team to Visualize", list(teams.keys()))
 
     if selected_team:
+        # Prepare data
         cols = teams[selected_team]
         team_df = df[cols].copy()
         team_df.columns = ["Velocity", "Billable TS", "Non-Billable TS", "Bugs Created", "Bugs Closed", "Releases", "SP/Hour"]
         team_df = team_df.apply(pd.to_numeric, errors='coerce')
+
+        # Optional metrics
         team_df["Total Time"] = team_df["Billable TS"] + team_df["Non-Billable TS"]
-        team_df["Utilization %"] = (team_df["Billable TS"] / team_df["Total Time"]) * 100
         team_df["Efficiency"] = team_df["Velocity"] / (team_df["Billable TS"] / 100)
 
+        # Display table
         st.subheader(f"{selected_team} - Metrics Overview")
         st.dataframe(team_df.style.format("{:.2f}"))
 
-        # Generate charts
+        # Create charts
         sns.set(style="whitegrid")
         fig, axs = plt.subplots(4, 1, figsize=(15, 20))
         fig.suptitle(f"{selected_team} - Performance Dashboard", fontsize=18, weight='bold')
 
+        # 1. Velocity
         team_df["Velocity"].plot(ax=axs[0], marker='o', color='blue', title=f"{selected_team} - Velocity Trend")
         axs[0].set_ylabel("Story Points")
 
-        team_df["Utilization %"].plot(ax=axs[1], marker='s', color='green', title=f"{selected_team} - Utilization %")
-        axs[1].set_ylabel("Utilization %")
-
+       # 2. Bugs created/closed
         team_df[["Bugs Created", "Bugs Closed"]].plot(kind='bar', ax=axs[2], title=f"{selected_team} - Bugs Trend", stacked=False)
         axs[2].set_ylabel("Count")
+        axs[2].set_xlabel("Sprint")
+        axs[2].tick_params(axis='x', rotation=45)
 
+        # 3. SP to Hour Ratio
         team_df["SP/Hour"].plot(ax=axs[3], marker='D', color='purple', title=f"{selected_team} - SP to Hour Ratio")
         axs[3].set_ylabel("SP/Hour")
+        axs[3].set_xlabel("Sprint")
+        axs[3].tick_params(axis='x', rotation=45)
+
+        # 4. Releases per sprint (replaces Utilization)
+        team_df["Releases"].plot(kind='bar', ax=axs[1], color='orange', title=f"{selected_team} - Number of Releases per Sprint")
+        axs[1].set_ylabel("Number of Releases")
+        axs[1].set_xlabel("Sprint")
+        axs[1].tick_params(axis='x', rotation=45)
 
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         st.pyplot(fig)
 
-        # Save to PDF buffer
+        # Save charts to PDF
         pdf.savefig(fig)
         plt.close()
-
-        # Offer PDF download
         pdf.close()
+
+        # PDF download button
         st.download_button(
             label="📥 Download PDF Report",
             data=pdf_buffer.getvalue(),
