@@ -21,10 +21,15 @@ if uploaded_file:
 
     # Metrics for each team
     teams = {
-        "Agency": [
-            "Agency Velocity", "Agency Billable TS", "Agency Non-Billable TS",
-            "Agency Bugs created", "Agency Bugs closed", "Agency # Releases in Prod",
-            "Agency SP to Hour Ratio"
+        "Agency (Team Ephesus)": [
+            "Agency (Team Ephesus) Velocity", "Agency (Team Ephesus) Billable TS", "Agency (Team Ephesus) Non-Billable TS",
+            "Agency (Team Ephesus) Bugs created", "Agency (Team Ephesus) Bugs closed", "Agency (Team Ephesus) # Releases in Prod",
+            "Agency (Team Ephesus) SP to Hour Ratio"
+        ],
+        "Agency (Team Cyclopes)": [
+            "Agency (Team Cyclopes) Velocity", "Agency (Team Cyclopes) Billable TS", "Agency (Team Cyclopes) Non-Billable TS",
+            "Agency (Team Cyclopes) Bugs created", "Agency (Team Cyclopes) Bugs closed", "Agency (Team Cyclopes) # Releases in Prod",
+            "Agency (Team Cyclopes) SP to Hour Ratio"
         ],
         "Production Systems": [
             "Production Systems Velocity", "Production Systems Billable TS", "Production Systems Non-Billable TS",
@@ -80,7 +85,7 @@ if uploaded_file:
         axs[3].set_xlabel("Sprint")
         axs[3].tick_params(axis='x', rotation=45)
 
-        # 4. Releases per sprint (replaces Utilization)
+        # 4. Releases per sprint
         team_df["Releases"].plot(kind='bar', ax=axs[1], color='orange', title=f"{selected_team} - Number of Releases per Sprint")
         axs[1].set_ylabel("Number of Releases")
         axs[1].set_xlabel("Sprint")
