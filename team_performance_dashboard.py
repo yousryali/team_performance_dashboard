@@ -19,6 +19,15 @@ if uploaded_file:
     df = df.set_index("Row Labels").T
     df.index.name = "Sprint"
 
+    if uploaded_file:
+    # Load and reshape data
+    df = pd.read_excel(uploaded_file, engine="openpyxl")
+    df = df.set_index("Row Labels").T
+    df.index.name = "Sprint"
+
+    st.write("### 🔍 Available Columns in Uploaded Data")
+    st.write(list(df.columns))  # Debug: Show actual column headers
+
     # Updated team metric mappings based on actual Excel sheet
     teams = {
         "Agency (Team Ephesus)": [
