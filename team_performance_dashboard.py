@@ -19,26 +19,26 @@ if uploaded_file:
     df = df.set_index("Row Labels").T
     df.index.name = "Sprint"
 
-    # Metrics for each team
+    # Updated team metric mappings based on actual Excel sheet
     teams = {
         "Agency (Team Ephesus)": [
-            "Agency (Team Ephesus) Velocity", "Agency (Team Ephesus) Billable TS", "Agency (Team Ephesus) Non-Billable TS",
-            "Agency (Team Ephesus) Bugs created", "Agency (Team Ephesus) Bugs closed", "Agency (Team Ephesus) # Releases in Prod",
+            "Agency (Team Ephesus) Velocity (SP)", "Agency (Team Ephesus) Billable hours", "Agency (Team Ephesus) Investment hours",
+            "Agency (Team Ephesus) # Bugs created", "Agency (Team Ephesus) # Bugs closed", "Agency (Team Ephesus) # Releases in Prod",
             "Agency (Team Ephesus) SP to Hour Ratio"
         ],
         "Agency (Team Cyclopes)": [
-            "Agency (Team Cyclopes) Velocity", "Agency (Team Cyclopes) Billable TS", "Agency (Team Cyclopes) Non-Billable TS",
-            "Agency (Team Cyclopes) Bugs created", "Agency (Team Cyclopes) Bugs closed", "Agency (Team Cyclopes) # Releases in Prod",
+            "Agency (Team Cyclopes) Velocity (SP)", "Agency (Team Cyclopes) Billable hours", "Agency (Team Cyclopes) Investment hours",
+            "Agency (Team Cyclopes) # Bugs created", "Agency (Team Cyclopes) # Bugs closed", "Agency (Team Cyclopes) # Releases in Prod",
             "Agency (Team Cyclopes) SP to Hour Ratio"
         ],
         "Production Systems": [
-            "Production Systems Velocity", "Production Systems Billable TS", "Production Systems Non-Billable TS",
-            "Production Systems Bugs created", "Production Systems Bugs closed", "Production Systems  # Releases in Prod",
+            "Production Systems Velocity (SP)", "Production Systems Billable hours", "Production Systems Investment hours",
+            "Production Systems # Bugs created", "Production Systems # Bugs closed", "Production Systems # Releases in Prod",
             "Production Systems SP to Hour Ratio"
         ],
         "TPS & DP": [
-            "TPS & DP Velocity", "TPS & DP Billable TS", "TPS & DP Non-Billable TS",
-            "TPS & DP Bugs created", "TPS & DP Bugs closed", "TPS & DP # Releases in Prod",
+            "TPS & DP Velocity (SP)", "TPS & DP Billable hours", "TPS & DP Investment hours",
+            "TPS & DP # Bugs created", "TPS & DP # Bugs closed", "TPS & DP # Releases in Prod",
             "TPS & DP SP to Hour Ratio"
         ]
     }
@@ -90,16 +90,15 @@ if uploaded_file:
         axs[1].set_ylabel("Number of Releases")
         axs[1].set_xlabel("Sprint")
         axs[1].tick_params(axis='x', rotation=45)
-        
+
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         st.pyplot(fig)
 
-        # Save charts to PDF
+        # Save to PDF
         pdf.savefig(fig)
         plt.close()
         pdf.close()
 
-        # PDF download button
         st.download_button(
             label="📥 Download PDF Report",
             data=pdf_buffer.getvalue(),
